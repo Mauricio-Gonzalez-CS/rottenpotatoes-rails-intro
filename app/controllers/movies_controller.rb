@@ -22,7 +22,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(
         :ratings => session[:ratings].map { |id| [id, '1'] }.to_h, 
         :sort_by => session[:sort_by]
-      )
+      ) and return 
     end
 
     @all_ratings = @show.all_ratings

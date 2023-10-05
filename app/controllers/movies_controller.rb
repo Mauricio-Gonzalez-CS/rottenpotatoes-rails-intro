@@ -7,15 +7,22 @@ class MoviesController < ApplicationController
   end
 
   def index
+
     if params[:ratings] != nil
       @movies = Movie.with_ratings(params[:ratings].keys)
       @show = Movie.new
       @ratings_to_show = @show.checkbox(params[:ratings].keys)
 
-    else
+    elsif params[:rating] == nil
       @movies = Movie.all
       @show = Movie.new
       @ratings_to_show = @show.ratings_to_show
+
+    elsif (!params[:ratings] and session[:ratings]) or (!params[:sort_by] and session[:sort_by])
+      redirect_to movies_path(
+        :ratings => session[:ratings].map { |id| [id, '1'] }.to_h, 
+        :sort_by => session[:sort_by]
+      )
     end
 
     @all_ratings = @show.all_ratings

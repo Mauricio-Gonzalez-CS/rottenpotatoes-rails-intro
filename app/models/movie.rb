@@ -31,4 +31,12 @@ class Movie < ActiveRecord::Base
     end
   end
 
+  def convertRatingToHash(ratings)
+    result = {}
+    ratings.each do |char|
+      result[char] = '1'
+    end
+    return result
+  end
+
 end

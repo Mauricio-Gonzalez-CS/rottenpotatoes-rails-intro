@@ -11,13 +11,25 @@ class MoviesController < ApplicationController
       @movies = Movie.with_ratings(params[:ratings].keys)
       @show = Movie.new
       @ratings_to_show = @show.checkbox(params[:ratings].keys)
+
     else
       @movies = Movie.all
       @show = Movie.new
       @ratings_to_show = @show.ratings_to_show
     end
     @all_ratings = @show.all_ratings
+
+    if params[:sort_by]
+      @movies = @movies.order(params[:sort_by])
+      case params[:sort_by]
+      when 'title'
+        @title_css = 'bg-warning hilite'
+      when 'release_date'
+        @release_date_css = 'hilite bg-warning'
+      end
+    end
     
+    @movie_hash = @show.convertRatingToHash(@ratings_to_show)
   end
 
   def new

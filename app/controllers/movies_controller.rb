@@ -17,19 +17,24 @@ class MoviesController < ApplicationController
       @show = Movie.new
       @ratings_to_show = @show.ratings_to_show
     end
+
     @all_ratings = @show.all_ratings
 
+    if params[:sort_by] =='release_date'
+      @release_date_css = 'hilite bg-warning'
+    end
+    if params[:sort_by] == 'title'
+      @title_css = 'bg-warning hilite'
+    end
     if params[:sort_by]
       @movies = @movies.order(params[:sort_by])
-      case params[:sort_by]
-      when 'title'
-        @title_css = 'bg-warning hilite'
-      when 'release_date'
-        @release_date_css = 'hilite bg-warning'
-      end
     end
     
+    
     @movie_hash = @show.convertRatingToHash(@ratings_to_show)
+
+    session[:ratings] = @ratings_to_show
+    session[:sort_by] = params[:sort_by]
   end
 
   def new
